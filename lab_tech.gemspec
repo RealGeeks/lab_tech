@@ -31,4 +31,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "rspec-rails", "~> 3.8.2"
+  spec.add_development_dependency "awesome_print"
+  spec.add_development_dependency "table_print"
 end

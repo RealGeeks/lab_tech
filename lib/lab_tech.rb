@@ -139,7 +139,7 @@ module LabTech
   def self.experiments_named(*experiment_names, &block)
     names = experiment_names.flatten.compact
     names.each do |exp_name|
-      named(exp_name, &block)
+      LabTech::Experiment.named(exp_name, &block)
     end
   end
 

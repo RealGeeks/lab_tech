@@ -143,8 +143,8 @@ module LabTech
   #
   ########################################################################
   def self.summarize_errors(experiment_name, limit: nil, io: $stdout)
-    exp = LabTech::Experiment.named( experiment_name, limit: limit, io: io )
-    exp.summarize_errors
+    exp = LabTech::Experiment.named( experiment_name )
+    exp.summarize_errors( limit: limit, io: io )
   end
 
   ########################################################################

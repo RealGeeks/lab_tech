@@ -147,6 +147,18 @@ module LabTech
     exp.summarize_errors
   end
 
+  ########################################################################
+  #
+  #   Sometimes specs might want to see that an experiment ran, the silly paranoid things
+  #
+  ########################################################################
+  def self.reset_run_count!
+    run_count.clear
+  end
+  def self.run_count
+    @_experiment_run_count ||= Hash.new(0)
+  end
+
 
   ########################################################################
   #

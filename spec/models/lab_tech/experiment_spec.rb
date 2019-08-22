@@ -3,9 +3,9 @@ require SPEC_ROOT.join('support/misc_helpers.rb')
 
 RSpec.describe LabTech::Experiment do
   around do |example|
-    described_class.publish_results_in_test_mode = true
-    example.run
-    described_class.publish_results_in_test_mode = false
+    LabTech.publish_results_in_test_mode do
+      example.run
+    end
   end
 
   def wtf

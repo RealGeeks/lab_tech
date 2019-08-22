@@ -52,9 +52,6 @@ module LabTech
       retry
     end
 
-    def self.publish_results_in_test_mode?        ; !!@publish_results_in_test_mode           ; end
-    def self.publish_results_in_test_mode=(value) ;   @publish_results_in_test_mode = !!value ; end
-
     # Sometimes specs might want to see that an experiment ran, the silly paranoid things
     def self.reset_run_count!
       run_count.clear
@@ -116,7 +113,7 @@ module LabTech
     def name=(value) ; write_attribute :name, value ; end
 
     def publish(scientist_result)
-      return if Rails.env.test? && !self.class.publish_results_in_test_mode?
+      return if Rails.env.test? && !LabTech.publish_results_in_test_mode?
       LabTech::Result.record_a_science( self, scientist_result )
     end
 

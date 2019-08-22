@@ -39,7 +39,7 @@ module LabTech
 
   ########################################################################
   #
-  #   This here is how you turn individual experiments on and off
+  #   This here is how you turn individual experiments on and off...
   #
   ########################################################################
   def self.enable(*experiment_names, percent: 100)
@@ -50,6 +50,24 @@ module LabTech
 
   def self.disable(*experiment_names)
     experiments_named( experiment_names, &:disable )
+  end
+
+  ########################################################################
+  #
+  #   ...with an additional step if you want to record results in the Rails
+  #   test environment.
+  #
+  ########################################################################
+  def self.publish_results_in_test_mode?        ; !!@publish_results_in_test_mode           ; end
+  def self.publish_results_in_test_mode=(value) ;   @publish_results_in_test_mode = !!value ; end
+  def self.publish_results_in_test_mode
+    fail ArgumentError, "a block is required for this method" unless block_given?
+
+    old_value = self.publish_results_in_test_mode?
+    self.publish_results_in_test_mode = true
+    yield
+  ensure
+    self.publish_results_in_test_mode = old_value
   end
 
   ########################################################################

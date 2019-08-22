@@ -5,9 +5,9 @@ RSpec.describe LabTech::Result, type: :model do
   let!(:experiment) { LabTech::Experiment.create(name: "wibble", percent_enabled: 100) }
 
   around do |example|
-    LabTech::Experiment.publish_results_in_test_mode = true
-    example.run
-    LabTech::Experiment.publish_results_in_test_mode = false
+    LabTech.publish_results_in_test_mode do
+      example.run
+    end
   end
 
   def wibble_wobble!( fabricated_durations: {} )

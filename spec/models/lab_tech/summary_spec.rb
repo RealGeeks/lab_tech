@@ -5,13 +5,12 @@ RSpec.describe LabTech::Summary do
   let(:summary_text) { experiment.summary.to_s }
 
   def record_experiment(cont: "foo", cand: "foo", speedup_factor: nil, baseline: 1.0, comparison: nil)
-    old_value = LabTech::Experiment.publish_results_in_test_mode?
-    LabTech::Experiment.publish_results_in_test_mode = true
+    LabTech.publish_results_in_test_mode do
 
-    LabTech.science "wibble" do |e|
-      e.use { cont.respond_to?(:call) ? cont.call : cont }
-      e.try { cand.respond_to?(:call) ? cand.call : cand }
-    end
+      LabTech.science "wibble" do |e|
+        e.use { cont.respond_to?(:call) ? cont.call : cont }
+        e.try { cand.respond_to?(:call) ? cand.call : cand }
+      end
 
 #######################################
 
@@ -27,39 +26,38 @@ RSpec.describe LabTech::Summary do
 # TODO: use Scientist's fabricate_durations_for_testing_purposes to make
 # the below comment (and code?) unnecessary
 #######################################
-    # Don't bother stubbing Scientist's clock; you'll get the wrong results 50%
-    # of the time because it runs the `try` and `use` blocks in random order,
-    # and then you'll be very very confused.
-    if speedup_factor && comparison.nil?
-      baseline = baseline.to_f
-      comparison = \
-        case
-        when speedup_factor  > 0 ; +1.0 * baseline / speedup_factor
-        when speedup_factor == 0 ; +1.0 * baseline
-        else                     ; -1.0 * baseline * speedup_factor
-        end
-    end
+      # Don't bother stubbing Scientist's clock; you'll get the wrong results 50%
+      # of the time because it runs the `try` and `use` blocks in random order,
+      # and then you'll be very very confused.
+      if speedup_factor && comparison.nil?
+        baseline = baseline.to_f
+        comparison = \
+          case
+          when speedup_factor  > 0 ; +1.0 * baseline / speedup_factor
+          when speedup_factor == 0 ; +1.0 * baseline
+          else                     ; -1.0 * baseline * speedup_factor
+          end
+      end
 
-    if baseline && comparison && speedup_factor.nil?
-      speedup_factor = LabTech::Speedup.compute_factor(baseline, comparison)
-    end
+      if baseline && comparison && speedup_factor.nil?
+        speedup_factor = LabTech::Speedup.compute_factor(baseline, comparison)
+      end
 
-    if baseline && comparison && speedup_factor
-      result = experiment.results.last
-      result.update_attributes({
-        control_duration:   baseline,
-        candidate_duration: comparison,
-        speedup_factor:     speedup_factor,
-        time_delta:         baseline - comparison,
-      })
+      if baseline && comparison && speedup_factor
+        result = experiment.results.last
+        result.update_attributes({
+          control_duration:   baseline,
+          candidate_duration: comparison,
+          speedup_factor:     speedup_factor,
+          time_delta:         baseline - comparison,
+        })
 
-      # Technically, we only needed to update the result... but for consistency, let's update the observations too.
-      result.control          .update_attributes duration: baseline
-      result.candidates.first .update_attributes duration: comparison
-    end
+        # Technically, we only needed to update the result... but for consistency, let's update the observations too.
+        result.control          .update_attributes duration: baseline
+        result.candidates.first .update_attributes duration: comparison
+      end
 
-  ensure
-    LabTech::Experiment.publish_results_in_test_mode = old_value
+    end # LabTech.publish_results_in_test_mode do
   end
 
   def wtf

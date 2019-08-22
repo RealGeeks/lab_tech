@@ -179,7 +179,7 @@ module LabTech
     private
 
     def increment_run_count
-      self.class.run_count[self.name] += 1
+      LabTech.run_count[self.name] += 1
     end
 
     def provide_default_cleaner

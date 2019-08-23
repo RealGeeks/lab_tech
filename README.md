@@ -284,12 +284,23 @@ mismatches by running:
 LabTech.compare_mismatches "spiffy-search", limit: 3
 ```
 
+(To view all mismatches, just leave off the `limit: 3`.)
+
 You have the ability to customize the output of this by passing a block that
 takes a "control" parameter followed by a "candidate" parameter; the return
 value of that block will be printed to the console.  How you do this will
 largely depend on the kind of data you're collecting to validate your
 experiments.  There are several examples in the `lib/lab_tech.rb` file; I
 encourage you to check them out.
+
+If you have errors to inspect as well, you can view these with:
+
+```ruby
+LabTech.summarize_errors "spiffy-search"
+```
+
+Note that the `summarize_errors` method also takes an optional `:limit` keyword
+argument.
 
 ### A Note About Experimental Design
 

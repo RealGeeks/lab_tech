@@ -60,29 +60,15 @@ module LabTech
       @_scientist_comparator
     end
 
-    # TODO: DRY up the io.puts structure between this and summarize_errors
-    def compare_mismatches(limit: nil, io: $stdout, &block)
+    def compare_mismatches(limit: nil, width: 100, io: $stdout, &block)
       mismatches = results.mismatched.includes(:observations)
       return if mismatches.empty?
       mismatches = mismatches.limit(limit) if limit
 
-      io.puts
-      io.puts "=" * 100
-      io.puts "Comparing results for #{name}:"
-      io.puts
-
-      mismatches.each do |result|
-        io.puts
-        io.puts "-" * 100
+      display_results mismatches, label: "Comparing results for #{name}:", io: io do |result|
         io.puts "Result ##{result.id}"
         result.compare_observations( io: io, &block )
-        io.puts "-" * 100
       end
-
-      io.puts
-      io.puts "=" * 100
-      io.puts
-      nil
     end
 
     def disable
@@ -140,31 +126,17 @@ module LabTech
       super
     end
 
-    # TODO: DRY up the io.puts structure between this and compare_mismatches
-    def summarize_errors(limit: nil, io: $stdout)
+    def summarize_errors(limit: nil, width: 100, io: $stdout)
       errors = results.other_error
       return if errors.empty?
       errors = errors.limit(limit) if limit
 
-      io.puts
-      io.puts "=" * 100
-      io.puts "Comparing results for #{name}:"
-      io.puts
-
-      errors.each do |result|
-        io.puts
-        io.puts "-" * 100
+      display_results errors, label: "Summarizing errors for #{name}:", io: io do |result|
         io.puts "Result ##{result.id}"
         result.candidates.each do |observation|
-          puts "  * " + observation.exception_class + ":  " + observation.exception_message
+          io.puts "  * " + observation.exception_class + ":  " + observation.exception_message
         end
-        io.puts "-" * 100
       end
-
-      io.puts
-      io.puts "=" * 100
-      io.puts
-      nil
     end
 
     def summarize_results
@@ -185,6 +157,28 @@ module LabTech
     def provide_default_cleaner
       return if cleaner.present?
       clean { |value| LabTech::DefaultCleaner.call(value) }
+    end
+
+    def display_results(results, label: nil, width: 100, io: $stdout)
+      return if results.empty?
+
+      io.puts
+      io.puts "=" * width
+      io.puts label if label
+      io.puts
+
+      results.each do |result|
+        io.puts
+        io.puts "-" * width
+        yield result
+        io.puts "-" * width
+      end
+
+      io.puts
+      io.puts "=" * width
+      io.puts
+
+      return nil
     end
   end
 end

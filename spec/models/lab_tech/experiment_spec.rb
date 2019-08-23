@@ -104,7 +104,38 @@ RSpec.describe LabTech::Experiment do
             expect( experiment.other_error_count ).to eq( 0 )
           end
         end
-    end
+      end
+
+      describe "summary output" do
+        before do
+          LabTech.science "wibble" do |e|
+            e.use { :wibble } ; e.try { :wibble }
+          end
+          LabTech.science "wibble" do |e|
+            e.use { :wibble } ; e.try { :florp }
+          end
+          LabTech.science "wibble" do |e|
+            e.use { :wibble } ; e.try { fail "nope" }
+          end
+        end
+
+        specify "compare_mismatches" do
+          io = StringIO.new
+          LabTech.compare_mismatches "wibble", io: io
+          out = io.string
+          expect(out).to match( /Comparing results for wibble:/ )
+          expect(out).to match( /control # => :wibble/ )
+          expect(out).to match( /candidate # => :florp/ )
+        end
+
+        specify "summarize_errors" do
+          io = StringIO.new
+          LabTech.summarize_errors "wibble", io: io
+          out = io.string
+          expect(out).to match( /Summarizing errors for wibble:/ )
+          expect(out).to include( "  * RuntimeError:  nope" )
+        end
+      end
     end
   end
 end

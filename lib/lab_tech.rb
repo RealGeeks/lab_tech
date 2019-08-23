@@ -33,8 +33,8 @@ module LabTech
 
     yield experiment
 
-    test = opts[:run] if opts # TODO: figure out what this line was supposed to be for ¯\_(ツ)_/¯
-    experiment.run(test)
+    candidate_name = opts[:run]
+    experiment.run(candidate_name)
   end
 
   ########################################################################

@@ -12,20 +12,6 @@ RSpec.describe LabTech::Summary do
         e.try { cand.respond_to?(:call) ? cand.call : cand }
       end
 
-#######################################
-
-########   #####    ######      #####
-   ##     ##   ##   ##   ##    ##   ##
-   ##    ##     ##  ##    ##  ##     ##
-   ##    ##     ##  ##    ##  ##     ##
-   ##    ##     ##  ##    ##  ##     ##
-   ##     ##   ##   ##   ##    ##   ##
-   ##      #####    ######      #####
-
-#######################################
-# TODO: use Scientist's fabricate_durations_for_testing_purposes to make
-# the below comment (and code?) unnecessary
-#######################################
       # Don't bother stubbing Scientist's clock; you'll get the wrong results 50%
       # of the time because it runs the `try` and `use` blocks in random order,
       # and then you'll be very very confused.

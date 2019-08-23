@@ -125,8 +125,7 @@ module LabTech
 
       # Select an index that's as close to `normalized` as possible without generating IndexErrors
       # (TODO: actually understand the math involved so I don't have to chop the ends off like an infidel)
-      index = [ 0, normalized ].max
-      index = [ index, bar_scale - 1 ].min
+      index = normalized.clamp( 0, bar_scale - 1 )
 
       case
       when x == 0 ; mid = VAL

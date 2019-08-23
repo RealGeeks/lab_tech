@@ -17,6 +17,33 @@ for accuracy and performance.  (Please feel free to send those back to us in a
 pull request; we simply haven't needed them for ourselves, so they don't
 exist yet.)
 
+## Why Scientist?
+
+Scientist is a great tool for trying out changes where:
+- comprehensive test coverage is impractical
+- your test suite doesn't give you sufficient confidence in your changes
+- you want detailed performance data on your proposed alternative(s)
+
+## Why LabTech?
+
+Scientist is amazing at **generating** data, but it assumes you'll develop your
+own tools for **recording** and **analyzing** it.  Scientist's README examples
+show interactions with StatsD and Redis, but if you're working in a Rails app,
+odds are *pretty darn good* that:
+
+1. you already have access to a RDBMS and ActiveRecord, and
+2. your throughput isn't so huge that some extra database writes will bring
+   said RDBMS to its knees.
+
+If both of those assumptions are true for your application, LabTech might be a
+good fit for you -- it records experimental results to the database so they're
+easy to query later using ActiveRecord.
+
+(If you're legitimately worried about the I/O load on your RDBMS, you can
+always ramp up your LabTech experiments a percentage point or two at a time,
+keeping an eye on your performance monitoring tools and scaling back as
+needed.)
+
 ## Usage
 
 Once you've installed the gem and run its migrations (as described in
@@ -263,6 +290,16 @@ value of that block will be printed to the console.  How you do this will
 largely depend on the kind of data you're collecting to validate your
 experiments.  There are several examples in the `lib/lab_tech.rb` file; I
 encourage you to check them out.
+
+### A Note About Experimental Design
+
+Scientist supports experiments with more than one candidate at a time, and
+therefore so does LabTech -- it will record as many candidates as you throw at
+it.  However, if you have multiple candidates, we don't have a good way to
+generate performance charts to compare all of the alternatives, so LabTech just
+doesn't bother printing them.  **If you try this, you're on your own.**  (But
+do let us know how it goes, and feel free to submit a PR if you find a good
+solution!)
 
 ## Installation
 

@@ -2,8 +2,6 @@ module LabTech
   class Summary
     TAB  = " " * 4
     LINE = "-" * 80
-    VAL = "█"
-    DOT = "·"
 
     def initialize(experiment)
       @experiment = experiment
@@ -46,10 +44,9 @@ module LabTech
     def add_speedup_chart_to(s)
       s.puts
       s.puts "Speedups (by percentiles):"
-      speedup_magnitude = @speedup_factors.minmax.map(&:to_i).map(&:abs).max.ceil
-      speedup_magnitude = 25 if speedup_magnitude.zero?
       (0..100).step(5) do |n|
-        s.puts TAB + speedup_summary_line(n, speedup_magnitude)
+        line = SpeedupLine.new(n, @speedup_factors)
+        s.puts TAB + line.to_s
       end
     end
 
@@ -98,62 +95,6 @@ module LabTech
         @time_deltas     = speedups.map(&:time).compact.sort
         @speedup_factors = speedups.map(&:factor).compact.sort
       end
-    end
-
-    def highlight_bar(bar)
-      left, right = bar.split(VAL)
-
-      left  = left         .gsub("  ", " #{DOT}")
-      right = right.reverse.gsub("  ", " #{DOT}").reverse
-
-      left + VAL + right
-    end
-
-    def pad_left(s, width)
-      n = [ ( width - s.length ), 0 ].max
-      [ " " * n , s ].join
-    end
-
-    def normalized_bar(x, magnitude, bar_scale: 25, highlight: false)
-      neg, pos = " " * bar_scale, " " * bar_scale
-      normalized = ( bar_scale * ( x.abs / magnitude ) ).floor
-
-      # Select an index that's as close to `normalized` as possible without generating IndexErrors
-      # (TODO: actually understand the math involved so I don't have to chop the ends off like an infidel)
-      index = normalized.clamp( 0, bar_scale - 1 )
-
-      case
-      when x == 0 ; mid = VAL
-      when x <  0 ; mid = DOT ; neg[ index ] = VAL ; neg = neg.reverse
-      when x  > 0 ; mid = DOT ; pos[ index ] = VAL
-      end
-
-      bar = "[%s%s%s]" % [ neg, mid, pos ]
-      bar = highlight_bar(bar) if highlight
-      bar
-    end
-
-    def speedup_summary_line(n, speedup_magnitude)
-      highlight = n == 50
-      label = "%3d%%" % n
-
-      speedup_factor = LabTech::Percentile.call(n, @speedup_factors)
-      rel_speedup    = "%+.1fx" % speedup_factor
-      bar            = normalized_bar( speedup_factor, speedup_magnitude, highlight: highlight)
-
-      speedup_cue    = pad_left( rel_speedup, speedup_width )
-      speedup_cue += " faster" if speedup_factor > 0
-
-      "#{label}  #{bar}  #{speedup_cue}"
-    end
-
-    def speedup_width
-      @_speedup_width ||= [
-        1, # sign
-        4, # digits
-        1, # decimal point
-        1, # digit after decimal point
-      ].sum
     end
 
     def summarize_count(s, count_name, label = nil)

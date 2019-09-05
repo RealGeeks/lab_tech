@@ -109,11 +109,6 @@ module LabTech
       left + VAL + right
     end
 
-    def humanize(n)
-      width = number_helper.number_with_delimiter( @counts[:results] ).length
-      "%#{width}s" % number_helper.number_with_delimiter( n )
-    end
-
     def pad_left(s, width)
       n = [ ( width - s.length ), 0 ].max
       [ " " * n , s ].join
@@ -136,14 +131,6 @@ module LabTech
       bar = "[%s%s%s]" % [ neg, mid, pos ]
       bar = highlight_bar(bar) if highlight
       bar
-    end
-
-    def number_helper
-      @_number_helper ||= Object.new.tap {|o| o.send :extend, ActionView::Helpers::NumberHelper }
-    end
-
-    def rate(n)
-      "%2.2f%%" % ( 100.0 * n / @counts[:results] )
     end
 
     def speedup_summary_line(n, speedup_magnitude)
@@ -170,12 +157,11 @@ module LabTech
     end
 
     def summarize_count(s, count_name, label = nil)
-      count = @counts[count_name]
-      return if count.zero?
-
+      n     = @counts[count_name]
       total = @counts[:results]
-      label ||= count_name.to_s
-      s.puts "%s of %s (%s) %s" % [ humanize( count ), humanize( total ), rate( count ), label ]
+      count = Count.new(count_name, n, total, label)
+      return if count.zero?
+      s.puts count.to_s
     end
 
   end

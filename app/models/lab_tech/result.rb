@@ -4,8 +4,8 @@ module LabTech
 
     belongs_to :experiment, class_name: "LabTech::Experiment"
     has_many :observations, class_name: "LabTech::Observation", dependent: :destroy
-    has_one :control,     ->() { where("name  = 'control'") }, class_name: "LabTech::Observation"
-    has_many :candidates, ->() { where("name != 'control'") }, class_name: "LabTech::Observation"
+    has_one :control,     ->() {     where(name: 'control') }, class_name: "LabTech::Observation"
+    has_many :candidates, ->() { where.not(name: 'control') }, class_name: "LabTech::Observation"
     serialize :context
 
     # NOTE: I don't think this accounts for the possibility that both the
@@ -14,14 +14,8 @@ module LabTech
     scope :correct,     -> { where( equivalent: true,  raised_error: false ) }
     scope :mismatched,  -> { where( equivalent: false, raised_error: false ) }
     scope :errored,     -> { where( equivalent: false, raised_error: true ) }
-    is_timeout = ->(is_or_is_not) {
-      col      = LabTech::Observation.table_name + ".exception_class"
-      operator = is_or_is_not ? "=" : "!="
-      value    = '"Timeout::Error"'
-      [ col, operator, value ].join(" ")
-    }
-    scope :timed_out,   -> { errored.joins(:candidates).where( is_timeout.(true)  ) }
-    scope :other_error, -> { errored.joins(:candidates).where( is_timeout.(false) ) }
+    scope :timed_out,   -> { errored.joins(:candidates).merge(Observation.timed_out) }
+    scope :other_error, -> { errored.joins(:candidates).merge(Observation.other_error) }
 
     after_create :increment_experiment_counters
 

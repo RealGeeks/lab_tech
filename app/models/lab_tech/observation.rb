@@ -4,6 +4,9 @@ module LabTech
 
     belongs_to :result, class_name: "LabTech::Result", foreign_key: :result_id, optional: true
 
+    scope :timed_out,   -> {     where(exception_class: 'Timeout::Error') }
+    scope :other_error, -> { where.not(exception_class: 'Timeout::Error') }
+
     serialize :value
 
     def raised_error?

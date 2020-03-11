@@ -359,11 +359,18 @@ Once that's done, you should be good to go!  See the "Usage" section, above.
 
 ## Contributing
 
-This gem was extracted just before its primary author left Real Geeks, so it's
-not quite clear who's going to take responsibility for the gem.  It's probably
-a good idea to open a GitHub issue to start a conversation before undertaking
-any great amount of work -- though, of course, you're perfectly welcome to fork
-the gem and use your modified version at any time.
+Bug reports and pull requests are welcome on GitHub at
+https://github.com/RealGeeks/lab_tech.
+
+It's probably a good idea to open a GitHub issue to start a conversation before
+undertaking any significant amount of work -- though, as always with F/OSS
+code, you're perfectly welcome to fork the gem and use your modified version at
+any time.
+
+This project is intended to be a safe, welcoming space for collaboration.
+While we have not yet formally adopted a code of conduct, it's probably a Very
+Good Idea to act in accordance with the <a
+href="https://www.contributor-covenant.org/">Contributor Covenant</a>.
 
 ## License
 

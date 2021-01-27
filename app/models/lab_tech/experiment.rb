@@ -111,7 +111,7 @@ module LabTech
       n = delete_and_count.call( LabTech::Observation.where(result_id: self.result_ids) )
       m = delete_and_count.call( self.results )
 
-      update_attributes(
+      update(
         equivalent_count:  0,
         timed_out_count:   0,
         other_error_count: 0,

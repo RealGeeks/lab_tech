@@ -31,7 +31,7 @@ RSpec.describe LabTech::Summary do
 
       if baseline && comparison && speedup_factor
         result = experiment.results.last
-        result.update_attributes({
+        result.update({
           control_duration:   baseline,
           candidate_duration: comparison,
           speedup_factor:     speedup_factor,
@@ -39,8 +39,8 @@ RSpec.describe LabTech::Summary do
         })
 
         # Technically, we only needed to update the result... but for consistency, let's update the observations too.
-        result.control          .update_attributes duration: baseline
-        result.candidates.first .update_attributes duration: comparison
+        result.control          .update duration: baseline
+        result.candidates.first .update duration: comparison
       end
 
     end # LabTech.publish_results_in_test_mode do

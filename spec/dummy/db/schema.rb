@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_192130) do
+ActiveRecord::Schema.define(version: 20210205225332) do
 
   create_table "lab_tech_experiments", force: :cascade do |t|
     t.string "name"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_192130) do
     t.text "exception_message"
     t.text "exception_backtrace"
     t.datetime "created_at"
+    t.text "diff"
     t.index ["result_id"], name: "index_lab_tech_observations_by_result_id"
   end
 

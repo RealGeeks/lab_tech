@@ -49,7 +49,9 @@ RSpec.describe LabTech::Experiment do
       end
 
       it "records the results when the experiment is run" do
-        expect( LabTech::Result ).to receive( :record_a_science ).with( experiment, instance_of(Scientist::Result) )
+        expect( LabTech::Result ).to \
+          receive( :record_a_science ) \
+          .with( experiment, instance_of(Scientist::Result), anything )
 
         LabTech.science "wibble" do |e|
           e.use { :wibble }
@@ -87,6 +89,36 @@ RSpec.describe LabTech::Experiment do
           result = experiment.results.first
           expect( result.control          .value ).to eq( "Yes indeedily!" )
           expect( result.candidates.first .value ).to eq( "You suck-diddly-uck, Flanders!" )
+        end
+      end
+
+      describe "diff-generating behavior" do
+        let(:result) { experiment.results.first }
+
+        specify "if a #diff block IS provided, it is used" do
+          LabTech.science "wibble" do |e|
+            e.use { :control }
+            e.try { :candidate }
+
+            e.diff { |control, candidate| "this is a diff" }
+          end
+
+          result = experiment.results.first
+          expect( result ).to be_kind_of( LabTech::Result )
+
+          expect( result.control          .diff ).to be_blank # because it's the reference against which candidates are diffed
+          expect( result.candidates.first .diff ).to eq( "this is a diff" )
+        end
+
+        specify "if a #diff block IS NOT provided, nothing untoward occurs" do
+          LabTech.science "wibble" do |e|
+            e.use { :control }
+            e.try { :candidate }
+          end
+
+          result = experiment.results.first
+          expect( result.control          .diff ).to be_blank # because it's the reference against which candidates are diffed
+          expect( result.candidates.first .diff ).to be_blank # because no block was provided
         end
       end
 

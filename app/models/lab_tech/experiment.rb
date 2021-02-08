@@ -71,6 +71,10 @@ module LabTech
       end
     end
 
+    def diff(&block)
+      @diff_with = block
+    end
+
     def disable
       update_attribute :percent_enabled, 0
     end
@@ -92,7 +96,7 @@ module LabTech
 
     def publish(scientist_result)
       return if Rails.env.test? && !LabTech.publish_results_in_test_mode?
-      LabTech::Result.record_a_science( self, scientist_result )
+      LabTech::Result.record_a_science( self, scientist_result, diff_with: @diff_with )
     end
 
     # I don't encourage the willy-nilly destruction of experimental results...

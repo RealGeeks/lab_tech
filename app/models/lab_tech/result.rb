@@ -22,9 +22,9 @@ module LabTech
 
     ##### CLASS METHODS #####
 
-    def self.record_a_science( experiment, scientist_result )
+    def self.record_a_science( experiment, scientist_result, **kwargs )
       self.create!(experiment: experiment) do |result|
-        result.record_a_science scientist_result
+        result.record_a_science scientist_result, **kwargs
       end
     end
 
@@ -50,7 +50,7 @@ module LabTech
       return nil
     end
 
-    def record_a_science(scientist_result)
+    def record_a_science(scientist_result, diff_with: nil)
       unless scientist_result.kind_of?( Scientist::Result )
         raise ArgumentError, "expected a Scientist::Result but got #{scientist_result.class}"
       end
@@ -59,7 +59,8 @@ module LabTech
 
       record_observation scientist_result.control
       scientist_result.candidates.each do |candidate|
-        record_observation candidate
+        diff = diff_with&.call(scientist_result.control, candidate)
+        record_observation candidate, diff: diff
       end
 
       record_simple_stats scientist_result
@@ -93,8 +94,9 @@ module LabTech
       end
     end
 
-    def record_observation(scientist_observation)
+    def record_observation(scientist_observation, attrs = {})
       self.observations.build do |observation|
+        observation.assign_attributes attrs if attrs.present?
         observation.record_a_science scientist_observation
       end
     end

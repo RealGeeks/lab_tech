@@ -302,6 +302,15 @@ LabTech.summarize_errors "spiffy-search"
 Note that the `summarize_errors` method also takes an optional `:limit` keyword
 argument.
 
+### Storing Diffs
+
+If you're working with complex data, you might not want to recompute the diffs
+from console.  As such, LabTech adds a `.diff` method to the experiment.  If
+you call this with a block, that block will be passed the control and candidate
+for each candidate, and its result will be stored on the `LabTech::Observation`
+record.  (See the "diff-generating behavior" spec in
+`spec/models/lab_tech/experiment_spec.rb` for examples.)
+
 ### A Note About Experimental Design
 
 Scientist supports experiments with more than one candidate at a time, and

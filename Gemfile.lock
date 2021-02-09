@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lab_tech (0.1.5)
+    lab_tech (0.1.6)
       rails (>= 5.1.0, < 6.1.0)
       scientist (~> 1.3)
 

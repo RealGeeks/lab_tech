@@ -100,7 +100,12 @@ RSpec.describe LabTech::Experiment do
             e.use { :control }
             e.try { :candidate }
 
-            e.diff { |control, candidate| "this is a diff" }
+            e.diff { |control, candidate|
+              # Make sure we pass values to the diff block, not the observations themselves
+              raise "nope" if control.is_a?(Scientist::Observation)
+              raise "nope" if candidate.is_a?(Scientist::Observation)
+              "this is a diff"
+            }
           end
 
           result = experiment.results.first

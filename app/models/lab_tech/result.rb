@@ -59,7 +59,14 @@ module LabTech
 
       record_observation scientist_result.control
       scientist_result.candidates.each do |candidate|
-        diff = diff_with&.call(scientist_result.control, candidate)
+        diff = nil
+        if diff_with
+          # Pass values to the diff block, not the observations themselves
+          cont = scientist_result.control.value
+          cand = candidate.value
+          diff = diff_with&.call(cont, cand)
+        end
+
         record_observation candidate, diff: diff
       end
 

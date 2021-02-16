@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lab_tech (0.1.6)
+    lab_tech (0.1.7)
       rails (>= 5.1.0, < 6.1.0)
       scientist (~> 1.3)
 
@@ -65,7 +65,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
-    nio4r (2.5.2)
+    nio4r (2.5.5)
     nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     rack (2.0.8)
@@ -112,11 +112,11 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.1)
-    scientist (1.4.0)
-    sprockets (4.0.0)
+    scientist (1.5.0)
+    sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.2.1)
+    sprockets-rails (3.2.2)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
@@ -128,7 +128,7 @@ GEM
       thread_safe (~> 0.1)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
 
 PLATFORMS
   ruby

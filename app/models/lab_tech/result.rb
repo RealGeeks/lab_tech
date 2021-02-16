@@ -22,10 +22,14 @@ module LabTech
 
     ##### CLASS METHODS #####
 
-    def self.record_a_science( experiment, scientist_result, **kwargs )
-      self.create!(experiment: experiment) do |result|
-        result.record_a_science scientist_result, **kwargs
+    # ugh: https://eregon.me/blog/2021/02/13/correct-delegation-in-ruby-2-27-3.html
+    class << self
+      def record_a_science( experiment, scientist_result, *args )
+        create!(experiment: experiment) do |result|
+          result.record_a_science scientist_result, *args
+        end
       end
+      ruby2_keywords :record_a_science if respond_to?(:ruby2_keywords, true)
     end
 
 

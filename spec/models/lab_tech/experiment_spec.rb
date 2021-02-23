@@ -92,6 +92,21 @@ RSpec.describe LabTech::Experiment do
         end
       end
 
+      specify "clients can intercept the LabTech::Result before it gets recorded (EXPERIMENTAL)" do
+        LabTech.science "wibble" do |e|
+          e.context( { a: 1 } )
+          e.use { :hello_world }
+          e.try { :howdy_earth }
+
+          e.__after_recording__ do |result|
+            result.update context: { b: 2 }
+          end
+        end
+
+        result = experiment.results.first
+        expect( result.context ).to eq( { b: 2 } )
+      end
+
       describe "diff-generating behavior" do
         let(:result) { experiment.results.first }
 

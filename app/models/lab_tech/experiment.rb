@@ -56,6 +56,11 @@ module LabTech
 
     ##### INSTANCE METHODS #####
 
+    # This method is experimental and should probably not be depended on
+    def __after_recording__(&block)
+      @after_recording = block
+    end
+
     def comparator
       @_scientist_comparator
     end
@@ -96,7 +101,10 @@ module LabTech
 
     def publish(scientist_result)
       return if Rails.env.test? && !LabTech.publish_results_in_test_mode?
-      LabTech::Result.record_a_science( self, scientist_result, diff_with: @diff_with )
+
+      LabTech::Result.record_a_science( self, scientist_result, diff_with: @diff_with ).tap do |result|
+        @after_recording&.call result
+      end
     end
 
     # I don't encourage the willy-nilly destruction of experimental results...

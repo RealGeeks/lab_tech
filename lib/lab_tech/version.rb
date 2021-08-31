@@ -1,3 +1,3 @@
 module LabTech
-  VERSION = '0.1.8' # about to release? rerun `bundle lock` to update Gemfile.lock
+  VERSION = '0.1.9' # about to release? rerun `bundle lock` to update Gemfile.lock
 end

@@ -366,6 +366,20 @@ Copied migration 20190822175815_create_experiment_tables.lab_tech.rb from lab_te
 
 Once that's done, you should be good to go!  See the "Usage" section, above.
 
+### Prevent `Psych::DisallowedClass` Errors
+
+LabTech stores `Observation#value` as a
+[Rails `serialize`d field](https://api.rubyonrails.org/classes/ActiveRecord/AttributeMethods/Serialization/ClassMethods.html#method-i-serialize),
+which uses [Psych.safe_load](https://www.rubydoc.info/stdlib/psych/Psych.safe_load).
+`Psych.safe_load` raises exceptions when deserializing data of an unpermitted class.
+LabTech requires permitting the following classes using
+[config.active_record.yaml_column_permitted_classes](https://guides.rubyonrails.org/configuring.html#config-active-record-yaml-column-permitted-classes):
+
+- `Symbol`
+- `Time`
+- `ActiveSupport::TimeWithZone`
+- `ActiveSupport::TimeZone`
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at

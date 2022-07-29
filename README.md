@@ -375,10 +375,16 @@ which uses [Psych.safe_load](https://www.rubydoc.info/stdlib/psych/Psych.safe_lo
 LabTech requires permitting the following classes using
 [config.active_record.yaml_column_permitted_classes](https://guides.rubyonrails.org/configuring.html#config-active-record-yaml-column-permitted-classes):
 
-- `Symbol`
-- `Time`
+- `ActiveSupport::Duration`
 - `ActiveSupport::TimeWithZone`
 - `ActiveSupport::TimeZone`
+- `Symbol`
+- `Time`
+
+*Note: this list is almost certainly incomplete!*
+
+If you discover new ones, please submit an issue or PR.  (There's also a list
+in ./lib/lab_tech/engine.rb that should be considered canonical.)
 
 ## Contributing
 

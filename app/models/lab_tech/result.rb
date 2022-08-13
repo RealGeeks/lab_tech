@@ -115,7 +115,7 @@ module LabTech
     def record_simple_stats(scientist_result)
       cont, cands = scientist_result.control, scientist_result.candidates
 
-      self.equivalent = cands.all? { |cand| cont.equivalent_to?(cand, &experiment.comparator) }
+      self.equivalent = cands.all? { |cand| cont.equivalent_to?(cand, comparator=experiment.comparator) }
 
       raised = ->(scientist_observation) { scientist_observation.exception.present? }
       self.raised_error = !raised.(cont) && cands.any?(&raised)

@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     lab_tech (0.1.9)
-      rails (>= 5.1.0, < 7.0)
+      rails (>= 5.1.0)
       scientist (~> 1.3)
 
 GEM
@@ -85,13 +85,13 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.0)
+    mini_portile2 (2.8.1)
     minitest (5.17.0)
     nio4r (2.5.8)
-    nokogiri (1.13.10)
+    nokogiri (1.14.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    racc (1.6.1)
+    racc (1.6.2)
     rack (2.2.4)
     rack-test (2.0.2)
       rack (>= 1.3)

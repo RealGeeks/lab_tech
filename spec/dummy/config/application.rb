@@ -19,7 +19,13 @@ require "lab_tech"
 module Dummy
   class Application < Rails::Application
     # Initialize configuration defaults for [current] Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 6.1
+
+    config.active_record.yaml_column_permitted_classes = [
+      Time, Symbol, ActiveSupport::HashWithIndifferentAccess,
+      ActiveSupport::TimeWithZone, ActiveSupport::TimeZone,
+      ActiveSupport::Duration
+    ]
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

@@ -156,7 +156,8 @@ GEM
       rspec-support (~> 3.10)
     rspec-support (3.10.1)
     scientist (1.6.0)
-    sqlite3 (1.4.1)
+    sqlite3 (1.6.2)
+      mini_portile2 (~> 2.8.0)
     table_print (1.5.6)
     thor (1.2.1)
     timeout (0.3.2)
@@ -174,7 +175,7 @@ DEPENDENCIES
   awesome_print
   lab_tech!
   rspec-rails (~> 4.0)
-  sqlite3
+  sqlite3 (~> 1.6.2)
   table_print
 
 BUNDLED WITH
